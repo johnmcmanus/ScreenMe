@@ -12,7 +12,7 @@
   $(function() {
    $("#Toggle_Menu").click(function()
       {
-         $("#menu_div").toggle();
+         $("#menu_parent").toggle();
       });
    });
 
@@ -20,22 +20,9 @@
      $(document).ready(function(){
         $("#menu").menu({
             select: function(event, ui) {
-               // var li  = document.createElement('li'),
-               // txt = document.createTextNode('This is the text in new element.');
-                //var ul = document.createElement('ul');
- 
-                //li.appendChild(txt);
-
                 var item = ui.item[0].id;
-                //var firstChild = $(item).firstChild;
-                //var nextChild = $(item).nextChild;
-                //ul = document.getElementById(item);
-                //ul.insertBefore(li, );
-                //$("#menu ul").append('<li>' + $('#Sub_Item_Text').val() + '</li>');
                $("#menu").menu("refresh");
-
-                $("#"+item).append("<li>"+$('#Sub_Item_Text').val()+"</li>");
-                //$('ul#menu li:nth-child(1)').append('<li>I own shit</li>');
+                $("#"+item).append("<li>"+$('#Sub_Item_Text').val()+" </li>");
                 $("#menu").menu("refresh");
             }
         });
@@ -49,7 +36,7 @@
 
      $("#Add_Subject").click(function()
       {
-         var htmlstuff = "<li>"+$('#Subject_Text').val()+"<ul><li>Sub-Items</li></ul></li>";
+         var htmlstuff = "<li>"+$('#Subject_Text').val()+"<ul><li> Sub-Items </li></ul></li>";
          $(htmlstuff).appendTo("#menu");
          $("#menu").menu("refresh");
        });
@@ -65,6 +52,8 @@
             {
             var menuvalues = $("#menu").find('.ui-menu-item').text();
             console.log(menuvalues);
+            var menuvalues_split = menuvalues.split(" ");
+            console.log(menuvalues_split);
       }
     });
    });
@@ -76,16 +65,14 @@
 </head>
 <body>
 <div id="Toggle_Menu">Toggle Menu</div>
+<div id="menu_parent">
 <div id="GO">Launch Pictures</div>
 <div id="Add_Subject">Add Subject</div>
 <input type="text" id="Subject_Text"></input>
 <div id="Add_Sub">Add Sub Item</div>
 <input type="text" id="Sub_Item_Text"></input>
-
-<div id="menu_parent">
-
 <ul id="menu">
-  <li class="ui-state-disabled">Add to me!</li>
+  <li class="ui-state-disabled"></li>
 </ul>
  </div>
 </body>
