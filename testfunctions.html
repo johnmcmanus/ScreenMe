@@ -44,19 +44,35 @@
   }
   );
 
-  $(function() 
-   {
-    $(document).bind('keydown', function(keyevent) 
+  
+
+ $(function() {
+   $("#GO").click(function(menuvalues_split)
       {
-         if(event.keyCode == 13) 
-            {
-            var menuvalues = $("#menu").find('.ui-menu-item').text();
-            console.log(menuvalues);
-            var menuvalues_split = menuvalues.split(" ");
-            console.log(menuvalues_split);
-      }
-    });
+        var menuvalues = $("#menu").find('.ui-menu-item').text();
+        var menuvalues_split = menuvalues.split(" ");
+        console.log(menuvalues_split[0]);
+        var currentval = menuvalues_split[0];
+         $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+        {
+          tags: currentval,
+          tagmode: "any",
+          format: "json"
+        },
+        function(data) {
+          $.each(data.items, function(i,item){
+            $("<img/>").attr("src", item.media.m).prependTo("#results");
+            if ( i == 10 ) return false;
+          });
+        });
+
+
+
+
+      });
    });
+
+
   
   </script>
   <style>
@@ -75,5 +91,8 @@
   <li class="ui-state-disabled"></li>
 </ul>
  </div>
+
+<div id="results"></div>
+
 </body>
 </html>
