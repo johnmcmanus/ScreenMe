@@ -7,7 +7,28 @@
   <script src="external/jquery/jquery.js"></script>
   <script src="jquery-ui.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="jquery.fullscreen-min.js"></script>
   <script>
+
+   $(function() {
+    
+    $(".fullscreen-supported").toggle($(document).fullScreen() != null);
+    $(".fullscreen-not-supported").toggle($(document).fullScreen() == null);
+    
+    $(document).bind("fullscreenchange", function(e) {
+       console.log("Full screen changed.");
+       $("#status").text($(document).fullScreen() ? 
+           "Full screen enabled" : "Full screen disabled");
+    });
+    
+    $(document).bind("fullscreenerror", function(e) {
+       console.log("Full screen error.");
+       $("#status").text("Browser won't enter full screen mode for some reason.");
+    });
+    
+    });
+
+
 
   $(function() {
    $("#Toggle_Menu").click(function()
@@ -22,7 +43,7 @@
             select: function(event, ui) {
                 var item = ui.item[0].id;
                $("#menu").menu("refresh");
-                $("#"+item).append("<li>"+$('#Sub_Item_Text').val()+" </li>");
+                $("#"+item).append("<li>"+$('#Sub_Item_Text').val()+"</li>");
                 $("#menu").menu("refresh");
             }
         });
@@ -36,7 +57,7 @@
 
      $("#Add_Subject").click(function()
       {
-         var htmlstuff = "<li>"+$('#Subject_Text').val()+"<ul><li> Sub-Items </li></ul></li>";
+         var htmlstuff = "<li>"+$('#Subject_Text').val()+"<ul><li>Sub-Items</li></ul></li>";
          $(htmlstuff).appendTo("#menu");
          $("#menu").menu("refresh");
        });
@@ -47,28 +68,26 @@
   
 
  $(function() {
-   $("#GO").click(function(menuvalues_split)
+   $("#GO").click(function()
       {
         var menuvalues = $("#menu").find('.ui-menu-item').text();
-        var menuvalues_split = menuvalues.split(" ");
-        console.log(menuvalues_split[0]);
-        var currentval = menuvalues_split[0];
-         $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
-        {
-          tags: currentval,
-          tagmode: "any",
-          format: "json"
-        },
-        function(data) {
-          $.each(data.items, function(i,item){
-            $("<img/>").attr("src", item.media.m).prependTo("#results");
-            if ( i == 10 ) return false;
-          });
-        });
-
-
-
-
+        console.log(menuvalues);
+        var menuvalues_split = menuvalues.split("Sub-Items");
+        console.log(menuvalues_split);
+        //$(document).fullScreen(true);
+        //var currentval = menuvalues_split[0];
+        // $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+        //{
+        //  tags: currentval,
+        //  tagmode: "any",
+        //  format: "json"
+        //},
+        //function(data) {
+        //  $.each(data.items, function(i,item){
+        //    $("<img/>").attr("src", item.media.m).prependTo("#results");
+        //    if ( i == 10 ) return false;
+        //  });
+        //});
       });
    });
 
@@ -79,7 +98,7 @@
   .ui-menu { width: 150px; }
   </style>
 </head>
-<body>
+<body style="background:white">
 <div id="Toggle_Menu">Toggle Menu</div>
 <div id="menu_parent">
 <div id="GO">Launch Pictures</div>
