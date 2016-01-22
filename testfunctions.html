@@ -39,11 +39,12 @@
 
   $(function() {
      $(document).ready(function(){
+      $("#menu").menu();
         $("#menu").menu({
             select: function(event, ui) {
                 var item = ui.item[0].id;
-               $("#menu").menu("refresh");
-                $("#"+item).append("<li>"+$('#Sub_Item_Text').val()+"</li>");
+                var htmlstuff2 = "<li class='submenuitem'>"+$('#Sub_Item_Text').val()+"</li>";
+                $(htmlstuff2).appendTo("#"+item);
                 $("#menu").menu("refresh");
             }
         });
@@ -53,11 +54,13 @@
 
   $(function() 
   {
-    $("#menu").menu();
-
+    var subjectcounter = 0;
+    var firstlist_item = 1;
      $("#Add_Subject").click(function()
       {
-         var htmlstuff = "<li>"+$('#Subject_Text').val()+"<ul><li>Sub-Items</li></ul></li>";
+        firstlist_item = firstlist_item + 1;
+        subjectcounter = subjectcounter + 1;
+         var htmlstuff = "<li>"+ $('#Subject_Text').val() +"<ul><li>Sub-Item</li></li>";
          $(htmlstuff).appendTo("#menu");
          $("#menu").menu("refresh");
        });
@@ -65,33 +68,49 @@
   }
   );
 
+
   
 
  $(function() {
    $("#GO").click(function()
       {
+        
         var menuvalues = $("#menu").find('.ui-menu-item').text();
-        console.log(menuvalues);
-        var menuvalues_split = menuvalues.split("Sub-Items");
-        console.log(menuvalues_split);
+        window.submenuitems_array = [];
+        var submenuitems = $("#menu").find('.submenuitem').each(function (index, element) {
+          submenuitems_array.push(this.innerText);
+        })
+        
+        console.log(submenuitems_array);
+      
+
         //$(document).fullScreen(true);
-        //var currentval = menuvalues_split[0];
-        // $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
-        //{
-        //  tags: currentval,
-        //  tagmode: "any",
-        //  format: "json"
-        //},
-        //function(data) {
-        //  $.each(data.items, function(i,item){
-        //    $("<img/>").attr("src", item.media.m).prependTo("#results");
-        //    if ( i == 10 ) return false;
-        //  });
-        //});
+        
+
+        function getImage(searchTerm, updateDiv) 
+        {
+        $("#results").append("<div id=" + updateDiv + "></div>")
+         $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+        {
+          tags: searchTerm,
+          tagmode: "any",
+          format: "json"
+        },
+        function(data) 
+        {
+          $.each(data.items, function(i,item){
+            $("<img/>").attr("src", item.media.m).prependTo("#" + updateDiv);
+            if ( i == 10 ) return false;
+          });
+        });
+        }
+
+        $.each(submenuitems_array,function(submenuitems_array) {
+          getImage(this, this);
+        });
+
       });
-   });
-
-
+    });
   
   </script>
   <style>
@@ -107,9 +126,9 @@
 <div id="Add_Sub">Add Sub Item</div>
 <input type="text" id="Sub_Item_Text"></input>
 <ul id="menu">
-  <li class="ui-state-disabled"></li>
+  <li class="ui-state-disabled">Menu</li>
 </ul>
- </div>
+</div>
 
 <div id="results"></div>
 
