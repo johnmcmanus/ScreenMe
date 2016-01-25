@@ -10,6 +10,7 @@
   <script type="text/javascript" src="jquery.fullscreen-min.js"></script>
   <script>
 
+
    $(function() {
     
     $(".fullscreen-supported").toggle($(document).fullScreen() != null);
@@ -23,7 +24,7 @@
     
     $(document).bind("fullscreenerror", function(e) {
        console.log("Full screen error.");
-       $("#status").text("Browser won't enter full screen mode for some reason.");
+       $("#status").text("Browser won't enter full screen mode for s reason.");
     });
     
     });
@@ -33,6 +34,7 @@
   $(function() {
    $("#Toggle_Menu").click(function()
       {
+
          $("#menu_parent").toggle();
       });
    });
@@ -52,14 +54,13 @@
   });
 
 
+
   $(function() 
   {
-    var subjectcounter = 0;
-    var firstlist_item = 1;
+
      $("#Add_Subject").click(function()
       {
-        firstlist_item = firstlist_item + 1;
-        subjectcounter = subjectcounter + 1;
+
          var htmlstuff = "<li>"+ $('#Subject_Text').val() +"<ul><li>Sub-Item</li></li>";
          $(htmlstuff).appendTo("#menu");
          $("#menu").menu("refresh");
@@ -89,8 +90,10 @@
 
         function getImage(searchTerm, updateDiv) 
         {
+
+
         updateDiv = updateDiv.replace(/\s+/g, '');
-        $("#results").append("<div id=" + updateDiv + ">" + updateDiv +"</div>")
+       
          $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
         {
           tags: searchTerm,
@@ -100,10 +103,24 @@
         function(data) 
         {
           $.each(data.items, function(i,item){
-            $("<img/>").attr("src", item.media.m).prependTo("#" + updateDiv);
-            if ( i == 10 ) return false;
+              $("#results").append("<div class='results' id=" + updateDiv + i + "></div>")
+              var bodyWidth = document.body.clientWidth
+              var bodyHeight = document.body.clientHeight;
+              var randPosX = Math.floor((Math.random()*bodyWidth));
+              var randPosY = Math.floor((Math.random()*bodyHeight));  
+              randPosY = randPosY + Math.floor((Math.random() * 300) + 1);
+  
+              $('#' + updateDiv + i).css('left', randPosX);
+              $('#' + updateDiv + i).css('top', randPosY);
+
+              
+             console.log("#" + updateDiv + i)
+
+            $("<img/>").attr("src", item.media.m).prependTo("#" + updateDiv + i);
+            if ( i == 50 ) return false;
           });
-        });
+          });
+
         }
 
         $.each(submenuitems_array,function(submenuitems_array) {
@@ -114,24 +131,105 @@
     });
   
   </script>
+  
+
+
   <style>
+
+
+
+
+.add_subject_class {
+  background: #58ACFA;
+  border: 1px solid #000;
+  padding: 5px;
+  width: 75px;
+  box-shadow: 0 0 20px #555;
+  -webkit-transition: all .2s ease-in;
+  transition: all .2s ease-in;
+}
+
+
+.add_subject_class:hover {
+  background: #58ACFA;
+  box-shadow: 0 0 20px #222;
+}
+
+
+.add_subject_class:active {
+  box-shadow: 0 0 20px #000;
+  background: #58ACFA;
+}
+
+
+.button_class:hover {
+  background: #bbb;
+  box-shadow: 0 0 20px #222;
+}
+
+
+.button_class:active {
+  box-shadow: 0 0 20px #000;
+  background: #aaa;
+}
+
+
+.button_class {
+  background: #ccc;
+  border: 1px solid #000;
+  padding: 5px;
+  width: 75px;
+  box-shadow: 0 0 20px #555;
+  -webkit-transition: all .2s ease-in;
+  transition: all .2s ease-in;
+}
+
+
+*:focus {
+  outline: none;
+}
+
+
+.results{   position:absolute; 
+        height:100%; 
+        width:100%; 
+
+}
+
+
+
   .ui-menu { width: 150px; }
   </style>
 </head>
-<body style="background:white">
+<body>
 <div id="Toggle_Menu">Toggle Menu</div>
 <div id="menu_parent">
-<div id="GO">Launch Pictures</div>
-<div id="Add_Subject">Add Subject</div>
+<div class="button_class" id="GO">Launch Pictures</div>
+<div class="add_subject_class" id="Add_Subject">Add Subject</div>
 <input type="text" id="Subject_Text"></input>
-<div id="Add_Sub">Add Sub Item</div>
+<div class="button_class" id="Add_Sub">Add Sub Item</div>
 <input type="text" id="Sub_Item_Text"></input>
 <ul id="menu">
   <li class="ui-state-disabled">Menu</li>
 </ul>
 </div>
 
-<div id="results"></div>
+<div class="results" id="results"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
